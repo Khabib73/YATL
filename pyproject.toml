@@ -1,9 +1,9 @@
 [project]
-name = "yaql"
+name = "yatl"
 version = "0.1.0"
-description = ""
+description = "Yet Another Testing Language"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "",email = "you@example.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.14"

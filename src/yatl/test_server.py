@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 import uvicorn
 from fastapi.exceptions import HTTPException
 
@@ -9,7 +9,7 @@ users = []
 
 class User(BaseModel):
     name: str
-    email: EmailStr
+    email: str
 
 
 @app.post("/users")

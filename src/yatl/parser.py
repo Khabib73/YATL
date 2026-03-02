@@ -36,7 +36,6 @@ def extract_data(response, extract_spec):
 
     for key, path in extract_spec.items():
         if path is None:
-            # Берём значение из JSON-ответа по ключу, равному key
             if resp_json and key in resp_json:
                 extracted[key] = resp_json[key]
             else:
@@ -154,4 +153,4 @@ def run_test(yaml_path):
 
 
 if __name__ == "__main__":
-    run_test("test.yaml")
+    run_test("unit.test.yaml")
