@@ -1,4 +1,4 @@
-name: Создание и проверка пользователя
+name: Create and check user
 base_url: http://127.0.0.1:8000/
 user_id_not_found: 1234567890
 
