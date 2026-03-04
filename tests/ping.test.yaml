@@ -1,0 +1,9 @@
+name: ping
+base_url: https://yandex.ru
+
+steps:
+- name: ping
+  request:
+    method: GET
+  expect:
+    status: 200

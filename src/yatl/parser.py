@@ -55,7 +55,7 @@ def run_step(step, context):
 
     request_data = resolved_step["request"]
     method = request_data.get("method", "GET").upper()
-    url = request_data["url"]
+    url = request_data.get("url", "")
     timeout = request_data.get("timeout", None)
     if not url.startswith(("http://", "https://")):
         base_url = context.get("base_url", "")
@@ -110,4 +110,4 @@ def run_test(yaml_path):
 
 
 if __name__ == "__main__":
-    run_test("tests/example.test.yaml")
+    run_test("tests/ping.test.yaml")
