@@ -2,27 +2,7 @@ import yaml
 import requests
 import json
 from render import TemplateRenderer
-
-
-def extract_data(response, extract_spec):
-    extracted = {}
-    if response.headers.get("content-type") == "application/json":
-        resp_json = response.json()
-    else:
-        resp_json = None
-
-    for key, path in extract_spec.items():
-        if path is None:
-            if resp_json and key in resp_json:
-                extracted[key] = resp_json[key]
-            else:
-                raise ValueError(f"Поле '{key}' не найдено в JSON-ответе")
-        else:
-            if resp_json and path in resp_json:
-                extracted[key] = resp_json[path]
-            else:
-                raise ValueError(f"Не удалось извлечь '{key}' по пути '{path}'")
-    return extracted
+from extractor import DataExtractor
 
 
 def check_expectations(response, expect_spec):
@@ -50,8 +30,9 @@ def check_expectations(response, expect_spec):
 
 def run_step(step, context):
 
-    template = TemplateRenderer()
-    resolved_step = template.render_data(step, context)
+    template_render = TemplateRenderer()
+    data_extractor = DataExtractor()
+    resolved_step = template_render.render_data(step, context)
 
     request_data = resolved_step["request"]
     method = request_data.get("method", "GET").upper()
@@ -80,7 +61,7 @@ def run_step(step, context):
         check_expectations(response, resolved_step["expect"])
 
     if "extract" in resolved_step:
-        extracted = extract_data(response, resolved_step["extract"])
+        extracted = data_extractor.extract()
         context.update(extracted)
 
     return context
