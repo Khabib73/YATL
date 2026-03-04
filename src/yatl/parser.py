@@ -1,19 +1,7 @@
 import yaml
 import requests
-from jinja2 import Template
 import json
-
-
-def render_data(data, context):
-
-    if isinstance(data, str):
-        return Template(data).render(context)
-    elif isinstance(data, dict):
-        return {key: render_data(value, context) for key, value in data.items()}
-    elif isinstance(data, list):
-        return [render_data(item, context) for item in data]
-    else:
-        return data
+from render import TemplateRenderer
 
 
 def extract_data(response, extract_spec):
@@ -61,7 +49,9 @@ def check_expectations(response, expect_spec):
 
 
 def run_step(step, context):
-    resolved_step = render_data(step, context)
+
+    template = TemplateRenderer()
+    resolved_step = template.render_data(step, context)
 
     request_data = resolved_step["request"]
     method = request_data.get("method", "GET").upper()
