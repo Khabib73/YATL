@@ -3,7 +3,7 @@ base_url: https://clck.ru
 steps:
 - name: test clck.ru
   request:
-    method: POST
+    method: GET
     params:
       url: 'https://ya.ru'
   expect:
