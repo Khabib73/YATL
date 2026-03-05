@@ -2,8 +2,15 @@ name: ping
 base_url: https://yandex.ru
 
 steps:
-- name: ping
+- name: ok_test
   request:
     method: GET
   expect:
     status: 200
+
+- name: not_found_test
+  request:
+    url: /not_found
+    method: GET
+  expect:
+    status: 404

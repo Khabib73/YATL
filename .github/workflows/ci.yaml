@@ -1,4 +1,4 @@
-name: Check linters and formatters
+name: Check linters, formatters, tests
 
 on: [push, pull_request, workflow_dispatch]
 
