@@ -5,36 +5,16 @@ from extractor import DataExtractor
 from validator import ResponseValidator
 import os
 from utils import search
+from request_builder import RequestBuilder
 
 
 def run_step(step, context: dict):
 
-    template_render = TemplateRenderer()
     data_extractor = DataExtractor()
+    template_render = TemplateRenderer()
     resolved_step = template_render.render_data(step, context)
-
-    request_data = resolved_step["request"]
-    method = request_data.get("method", "GET").upper()
-    url = request_data.get("url", "")
-    timeout = request_data.get("timeout", None)
-    if not url.startswith(("http://", "https://")):
-        base_url = context.get("base_url", "")
-        url = base_url.rstrip("/") + "/" + url.lstrip("/")
-
-    headers = request_data.get("headers", {})
-    json_body = request_data.get("json")
-    params = request_data.get("params")
-    cookies = request_data.get("cookies")
-
-    response = requests.request(
-        method=method,
-        url=url,
-        headers=headers,
-        json=json_body,
-        params=params,
-        timeout=timeout,
-        cookies=cookies,
-    )
+    request_builder = RequestBuilder(step, context, resolved_step)
+    response = requests.request(**request_builder.build())
 
     if "expect" in resolved_step:
         validator = ResponseValidator(response, resolved_step["expect"])
