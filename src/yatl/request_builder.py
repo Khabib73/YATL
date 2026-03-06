@@ -3,17 +3,18 @@ class RequestBuilder:
         self.context = context
         self.resolved_step = resolved_step
 
+    def _build_url(self, url: str) -> str:
+        base_url: str = self.context.get("base_url", "")
+        return base_url.rstrip("/") + "/" + url.lstrip("/")
+
     def build(self):
         request_data: dict = self.resolved_step["request"]
         method = str(request_data.get("method", "GET")).upper()
         url: str = request_data.get("url", "")
         timeout = request_data.get("timeout", None)
-        if not url.startswith(("http://", "https://")):
-            base_url: str = self.context.get("base_url", "")
-            url = base_url.rstrip("/") + "/" + url.lstrip("/")
-
+        url = self._build_url(url)
         headers = request_data.get("headers", {})
-        json_body = request_data.get("body")
+        body = request_data.get("body")
         params = request_data.get("params")
         cookies = request_data.get("cookies")
         return {
@@ -21,7 +22,7 @@ class RequestBuilder:
             "url": url,
             "timeout": timeout,
             "headers": headers,
-            "json": json_body,
+            "json": body,
             "params": params,
             "cookies": cookies,
         }
