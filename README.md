@@ -28,7 +28,6 @@ The test file should contain the following fields:
 
 ```yaml
 - name: the name of the test
-  base_url: the base url to be used
   variables: the global variables to be used in the test
 - steps: a list of steps to be executed
     - name: the name of the step
