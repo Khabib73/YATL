@@ -1,7 +1,7 @@
 import os
-from step_executor import StepExecutor
-from extractor import DataExtractor
-from render import TemplateRenderer
+from .step_executor import StepExecutor
+from .extractor import DataExtractor
+from .render import TemplateRenderer
 import yaml
 from itertools import takewhile
 
@@ -16,7 +16,7 @@ class Runner:
         self.template_render = template_render
         self.step_executor = StepExecutor(data_extractor, template_render)
 
-    def _create_context(self, test_spec: dict):
+    def create_context(self, test_spec: dict):
         return {
             k: v for k, v in takewhile(lambda x: x[0] != "steps", test_spec.items())
         }
@@ -27,13 +27,16 @@ class Runner:
 
     def run_test(self, yaml_path: str):
 
-        test_spec = self._load_test(yaml_path)
+        test_spec: dict = self._load_test(yaml_path)
         if test_spec is None:
             return
-        context = self._create_context(test_spec)
+        context = self.create_context(test_spec)
         print(f"Run test: {test_spec.get('name', '')}")
         steps = test_spec.get("steps", [])
         for i, step in enumerate(steps, start=1):
+            step: dict
+            if step is None:
+                continue
             print(f"Step {i}: {step.get('name', '')}")
             context = self.step_executor.run_step(step, context)
 

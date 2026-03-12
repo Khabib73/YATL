@@ -1,7 +1,7 @@
-from render import TemplateRenderer
-from extractor import DataExtractor
-from validator import ResponseValidator
-from request_builder import RequestBuilder
+from .render import TemplateRenderer
+from .extractor import DataExtractor
+from .validator import ResponseValidator
+from .request_builder import RequestBuilder
 import requests
 
 

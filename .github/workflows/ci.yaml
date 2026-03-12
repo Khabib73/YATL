@@ -1,6 +1,10 @@
 name: Check linters, formatters, tests
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [master, dev]
+  pull_request:
+    branches: [master]
 
 jobs:
   formatters:
