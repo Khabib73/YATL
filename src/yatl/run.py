@@ -32,9 +32,9 @@ class Runner:
     def create_context(self, test_spec: dict):
         """Creates the initial context from the test specification.
 
-        The context consists of all top‑level keys that appear before the
+        The context consists of all top-level keys that appear before the
         "steps" key in the YAML document. This typically includes `base_url`,
-        `name`, `description`, and any user‑defined variables.
+        `name`, `description`, and any user-defined variables.
 
         Args:
             test_spec: The parsed YAML dictionary.
@@ -86,6 +86,15 @@ class Runner:
             return True
         return False
 
+    def _print_progress(self, result_info: list[str]):
+        """Prints progress messages to the console.
+
+        Args:
+            result_info: List of messages to print.
+        """
+        for line in result_info:
+            print(line)
+
     def run_test(self, yaml_path: str):
         """Executes a single test file.
 
@@ -115,9 +124,7 @@ class Runner:
             result_info.append(f"Step {i}: {step.get('name', '')}")
             context = self.step_executor.run_step(step, context)
 
-        result_info.append("-" * 10)
-        for line in result_info:
-            print(line)
+        self._print_progress(result_info)
 
     def _search_files(self, current_path: str, item: str, files: list):
         """Recursively searches for test files with a .test.yaml/.test.yml suffix.

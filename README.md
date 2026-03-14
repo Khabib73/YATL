@@ -46,10 +46,3 @@ The test file should contain the following fields:
 ```
 
 File name should be suffix **.test.yaml**
-
-
-To run the test, use the following command:
-
-```bash
-make run_tests
-```
