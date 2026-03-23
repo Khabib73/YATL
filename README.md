@@ -6,20 +6,22 @@ You can using this framework to write tests for your applications and integratio
 for example, create **example.test.yaml** and write the following code:
 
 ```yaml
-name: test clck.ru
-base_url: https://clck.ru
+name: ping
+base_url: google.com
+
 steps:
-- name: test clck.ru
+- name: access_google
   request:
     method: GET
-    params:
-      url: 'https://ya.ru'
-  extract:
-    text_responce: text
   expect:
     status: 200
-    body:
-      text: "{{ text_responce }}"
+
+- name: failed_test
+  request:
+    method: GET
+    url: /not_found
+  expect:
+    status: 404
 ```
 
 ## Usage
