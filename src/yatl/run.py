@@ -28,7 +28,7 @@ class Runner:
         self.template_render = template_render
         self.step_executor = StepExecutor(data_extractor, template_render)
 
-    def _is_skipped_test(self, test_spec: dict, result_info: list[str]):
+    def _is_skipped_test(self, test_spec: dict) -> bool:
         """Checks if a test is skipped based on the "scip" flag.
 
         Args:
@@ -38,11 +38,10 @@ class Runner:
             True if the test is skipped, False otherwise.
         """
         if test_spec.get("skip", False):
-            result_info.append(f"Test {test_spec.get('name', '')} skipped")
             return True
         return False
 
-    def _is_skipped_step(self, step: dict, result_info: list[str]):
+    def _is_skipped_step(self, step: dict) -> bool:
         """Checks if a step is skipped based on the "skip" flag.
 
         Args:
@@ -52,11 +51,10 @@ class Runner:
             True if the step is skipped, False otherwise.
         """
         if step.get("skip", False):
-            result_info.append(f"Step {step.get('name', '')} skipped")
             return True
         return False
 
-    def _print_progress(self, result_info: list[str]):
+    def _print_progress(self, result_info: list[str]) -> None:
         """Prints progress messages to the console.
 
         Args:
@@ -64,6 +62,47 @@ class Runner:
         """
         for line in result_info:
             print(line)
+
+    def _load_test(self, yaml_path: str) -> tuple[dict | None, dict | None]:
+        """Load test specification and create initial context
+
+        Args:
+            yaml_path: Path to the test YAML file.
+        Returns:
+            test_spec: Parsed YAML dictionary.
+            context: Initial context dictionary.
+        """
+        test_spec = load_yaml_test(yaml_path)
+        if test_spec is None:
+            return None, None
+        context = create_context(test_spec)
+        return test_spec, context
+
+    def _execute_step(
+        self,
+        test_info: list[str],
+        step_number,
+        step: dict,
+        context: dict,
+    ) -> dict:
+        """Execute a single step.
+
+        Args:
+            step: Parsed YAML dictionary.
+            context: Current context dictionary.
+
+        Returns:
+            Updated context dictionary.
+        """
+        if step is None:
+            return context
+
+        if self._is_skipped_step(step):
+            test_info.append(f"Step {step.get('name', '')} skipped")
+            return context
+        else:
+            test_info.append(f"Step {step_number}: {step.get('name', '')}")
+            return self.step_executor.run_step(step, context)
 
     def run_test(self, yaml_path: str):
         """Executes a single test file.
@@ -75,26 +114,25 @@ class Runner:
         Args:
             yaml_path: Path to the test YAML file.
         """
-        result_info = []
-        result_info.append("-" * 10)
-        test_spec: dict = load_yaml_test(yaml_path)
+        test_info = []
+        test_spec, context = self._load_test(yaml_path)
+
         if test_spec is None:
             return
-        context = create_context(test_spec)
-        if self._is_skipped_test(test_spec, result_info):
-            return
-        result_info.append(f"Run test: {test_spec.get('name', '')}")
-        steps = test_spec.get("steps", [])
-        for i, step in enumerate(steps, start=1):
-            step: dict
-            if step is None:
-                continue
-            if self._is_skipped_step(step, result_info):
-                continue
-            result_info.append(f"Step {i}: {step.get('name', '')}")
-            context = self.step_executor.run_step(step, context)
 
-        self._print_progress(result_info)
+        if self._is_skipped_test(test_spec):
+            test_info.append(f"Test {test_spec.get('name', '')} skipped")
+            self._print_progress(test_info)
+            return
+
+        test_info.append("-" * 10)
+        test_info.append(f"Run test: {test_spec.get('name', '')}")
+        steps: list[dict] = test_spec.get("steps", [])
+
+        for i, step in enumerate(steps, start=1):
+            context = self._execute_step(test_info, i, step, context)
+
+        self._print_progress(test_info)
 
     def run_all_tests(self, max_workers=None):
         """Discovers and runs all test files in the current working directory.
