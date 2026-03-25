@@ -1,6 +1,6 @@
 ## YATL - Yet Another Testing Language
 
-Yatl is a simple testing language that allows you to write tests in YAML. If you know HTTP and Yaml, you know Yatl. This lowers entry threshold for creating API tests in our team.
+Yatl is a simple testing language that allows you to write tests in YAML. If you know HTTP and YAML, you know YATL. This lowers entry threshold for creating API tests in our team.
 You can using this framework to write tests for your applications and integration to CI/CD.
 
 for example, create **example.test.yaml** and write the following code:
