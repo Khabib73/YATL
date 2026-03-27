@@ -17,8 +17,7 @@ def test_create_context_with_empty_data_returns_empty_context():
 
 
 @pytest.mark.parametrize("expected", [True, False])
-def test_is_skipped_test(expected, runner):
+def test_is_skipped_test(expected, skip_checker):
     "Test that is_skipped_test returns True if test is skipped."
     data = {"skip": expected}
-    context = create_context(data)
-    assert runner._is_skipped_test(context) is expected
+    assert skip_checker.is_skipped_test(data) is expected

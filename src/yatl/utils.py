@@ -52,8 +52,8 @@ def search_files(current_path: str, item: str, files: list):
         files.append(full_path)
         return
     elif os.path.isdir(full_path):
-        for i in os.listdir(full_path):
-            search_files(full_path, i, files)
+        for dir in os.listdir(full_path):
+            search_files(full_path, dir, files)
     return files
 
 

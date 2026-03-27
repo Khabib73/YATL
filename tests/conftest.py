@@ -1,25 +1,43 @@
 import pytest
+from src.yatl.extractor import DataExtractor
+from src.yatl.render import TemplateRenderer
+from src.yatl.step_executor import StepExecutor
+from src.yatl.run import Runner, Reporter, SkipChecker, TestLoader
 
 
 @pytest.fixture
 def data_extractor():
-    from src.yatl.extractor import DataExtractor
-
     return DataExtractor()
 
 
 @pytest.fixture
 def template_render():
-    from src.yatl.render import TemplateRenderer
-
     return TemplateRenderer()
 
 
 @pytest.fixture
-def runner(template_render, data_extractor):
-    from src.yatl.run import Runner
+def step_executor(data_extractor, template_render):
+    return StepExecutor(data_extractor, template_render)
 
-    return Runner(data_extractor, template_render)
+
+@pytest.fixture
+def reporter():
+    return Reporter()
+
+
+@pytest.fixture
+def skip_checker():
+    return SkipChecker()
+
+
+@pytest.fixture
+def test_loader():
+    return TestLoader()
+
+
+@pytest.fixture
+def runner(step_executor, reporter, skip_checker, test_loader):
+    return Runner(step_executor, reporter, skip_checker, test_loader)
 
 
 @pytest.fixture

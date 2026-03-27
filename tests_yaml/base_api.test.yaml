@@ -12,6 +12,7 @@ steps:
           id: 1
           name: Alice
           email: alice@example.com
+          password: hackme12345
     expect:
       body:
         json:
@@ -19,7 +20,7 @@ steps:
           "message": "User created"
       status: 200
     extract:
-      user_id: info.id
+      user_id: "info.id"
 
   - name: Get user and extract email
     request:

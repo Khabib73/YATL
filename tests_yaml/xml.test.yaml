@@ -1,6 +1,6 @@
 name: XML and Text endpoints test
 base_url: http://localhost:8000
-skip: true
+skip: false
 
 steps:
   - name: Get XML
@@ -43,6 +43,7 @@ steps:
         text: "Hello, this is plain text response."
 
   - name: Post plain text
+    skip: true
     request:
       method: POST
       url: /text

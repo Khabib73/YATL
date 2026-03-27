@@ -1,8 +1,11 @@
 check:
-	poetry run ruff check . --fix
+	poetry run ruff check .
 
 format:
 	poetry run ruff format .
+
+check-types:
+	poetry run mypy .
 
 server:
 	poetry run python src/yatl/base_api.py

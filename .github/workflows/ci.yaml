@@ -24,6 +24,9 @@ jobs:
       
       - name: run ruff format
         run: ruff format .
+
+      # - name: mypy check
+      #   run: mypy .
       
       
   tests_yaml:
