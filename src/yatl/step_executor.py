@@ -2,7 +2,6 @@ from .render import TemplateRenderer
 from .extractor import DataExtractor
 from .validator import ResponseValidator
 from .request_builder import RequestBuilder
-import requests
 from typing import Any, Dict
 
 
@@ -30,23 +29,6 @@ class StepExecutor:
         self.data_extractor = data_extractor
         self.template_renderer = template_renderer
 
-    def _create_request(
-        self, context: Dict[str, Any], resolved_step: Dict[str, Any]
-    ) -> requests.Response:
-        """Builds and sends the HTTP request described by the step.
-
-        Args:
-            context: The current context (contains base_url, previous extracts, etc.)
-            resolved_step: The step dictionary after template rendering.
-
-        Returns:
-            The HTTP response object.
-        """
-        request_builder = RequestBuilder(context, resolved_step)
-        data = request_builder.build_request_data()
-        response = requests.request(**data)
-        return response
-
     def run_step(self, step: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """Executes a single test step and returns the updated context.
 
@@ -63,7 +45,8 @@ class StepExecutor:
             The updated context (with newly extracted values, if any).
         """
         resolved_step = self.template_renderer.render_data(step, context)
-        response = self._create_request(context, resolved_step)
+        request_builder = RequestBuilder(context, resolved_step)
+        response = request_builder.send_request()
 
         if "expect" in resolved_step:
             validator = ResponseValidator(response, resolved_step["expect"])

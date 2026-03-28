@@ -1,4 +1,5 @@
 from typing import Any, Dict, Union
+from requests import request, Response
 
 
 class RequestBuilder:
@@ -18,6 +19,20 @@ class RequestBuilder:
         """
         self.context = context
         self.resolved_step = resolved_step
+
+    def send_request(self) -> Response:
+        """Builds and sends the HTTP request described by the step.
+
+        Args:
+            context: The current context (contains base_url, previous extracts, etc.)
+            resolved_step: The step dictionary after template rendering.
+
+        Returns:
+            The HTTP response object.
+        """
+        data = self.build_request_data()
+        response = request(**data)
+        return response
 
     def _build_url(self, url: str) -> str:
         """Constructs a full URL by prepending the base URL from context.

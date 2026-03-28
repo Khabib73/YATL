@@ -1,6 +1,6 @@
 name: ping
 base_url: https://google.com
-skip: true
+skip: false
 
 steps:
 - name: access_google
