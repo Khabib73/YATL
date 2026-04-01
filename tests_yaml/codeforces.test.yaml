@@ -1,0 +1,17 @@
+name: test codeforces
+base_url: codeforces.com
+user_name: MikeMirzayanov
+
+steps:
+  - name: simple_test
+    request:
+      method: GET
+      url: /api/user.info?handles={{user_name}}
+    expect:
+      body:
+        json:
+          "result.0.handle": MikeMirzayanov
+          "result.0.firstName": Mike
+          "result.0.lastName": Mirzayanov
+          "result.0.organization": Codeforces
+      status: 200

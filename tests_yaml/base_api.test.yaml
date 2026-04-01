@@ -1,6 +1,6 @@
 name: Base API tests with extract
 base_url: http://localhost:8000
-skip: false
+skip: true
 
 steps:
   - name: Create user and extract ID

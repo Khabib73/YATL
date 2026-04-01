@@ -86,6 +86,10 @@ def get_nested_value(data: Any, path: str) -> Any:
     for key in keys:
         if isinstance(current, dict) and key in current:
             current = current[key]
+        elif isinstance(current, list) and key.isdigit() and int(key) < len(current):
+            current = current[int(key)]
+        elif isinstance(current, list):
+            raise ValueError(f"Path component '{key}' is not an index in {current}")
         else:
             raise ValueError(f"Path component '{key}' not found in {current}")
     return current
