@@ -3,7 +3,7 @@ base_url: google.com
 skip: true
 
 steps:
-  - name: skipped_test_step
+  - name: empty
     request:
       method: GET
     expect:
