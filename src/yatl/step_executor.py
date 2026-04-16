@@ -1,7 +1,7 @@
 from .render import TemplateRenderer
 from .extractor import DataExtractor
 from .validator import ResponseValidator
-from .request_builder import RequestBuilder
+from .request_builder import send_request
 from typing import Any, Dict
 
 
@@ -28,8 +28,7 @@ def execute_step(
         The updated context (with newly extracted values, if any).
     """
     resolved_step = template_renderer.render_data(step, context)
-    request_builder = RequestBuilder(context, resolved_step)
-    response = request_builder.send_request()
+    response = send_request(context, resolved_step)
 
     if "expect" in resolved_step:
         validator = ResponseValidator(response, resolved_step["expect"])
