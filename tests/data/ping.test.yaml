@@ -1,0 +1,9 @@
+name: test google
+base_url: google.com
+
+steps:
+  - name: simple_test
+    request:
+      method: GET
+    expect:
+      status: 200

@@ -21,11 +21,14 @@ def load_test_yaml(yaml_path: str) -> dict[Any, Any] | None:
         yaml_path: Path to the .test.yaml or .test.yml file.
 
     Returns:
-        The parsed YAML as a dictionary, or None if the file is empty.
+        The parsed YAML as a dictionary, or None if the file is not found."
     """
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        test_specification = yaml.safe_load(f)
-    return test_specification
+    try:
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            test_specification = yaml.safe_load(f)
+            return test_specification
+    except FileNotFoundError:
+        return None
 
 
 def is_skipped_test(test_specification: dict[Any, Any]) -> bool:
