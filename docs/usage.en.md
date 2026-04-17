@@ -25,6 +25,13 @@ A YATL test file is a YAML document with the following top-level keys:
 - `skip` (optional): If set to `true`, the entire test will be skipped during execution.
 - `steps`: List of test steps, each representing an HTTP request and its assertions.
 
+Each step can contain the following fields:
+- `name` (optional): step name for identification in logs
+- `description` or `desc` (optional): detailed description of the step's purpose
+- `skip` (optional): if `true`, the step will be skipped
+- `request` (required): HTTP request specification
+- `expect` (optional): response assertions
+
 Example:
 
 ```yaml
@@ -33,6 +40,7 @@ base_url: http://localhost:8000
 
 steps:
   - name: Create a user
+    description: Create a new user in the system with the provided data
     request:
       method: POST
       url: /users
