@@ -133,6 +133,12 @@ class Runner:
             return context
         else:
             reporter.add_info(info(f"Step {step_number}: {step.get('name', '')}"))
+
+            if step.get("description"):
+                reporter.add_info(info(f"description: {step.get('description', '')}"))
+            elif step.get("desc"):
+                reporter.add_info(info(f"description: {step.get('desc', '')}"))
+
             return self.step_executor.run_step(step, context)
 
     def run_test(self, yaml_path: str) -> None:
@@ -161,6 +167,7 @@ class Runner:
 
         reporter.add_info(header("-" * 10))
         reporter.add_info(header(f"Run test: {test_specification.get('name', '')}"))
+
         steps: list[dict] = test_specification.get("steps", [])
 
         for i, step in enumerate(steps, start=1):

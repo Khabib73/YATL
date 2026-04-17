@@ -4,6 +4,7 @@ user_name: MikeMirzayanov
 
 steps:
   - name: simple_test
+    description: Get information about the user MikeMirzayanov
     request:
       method: GET
       url: /api/user.info?handles={{user_name}}
