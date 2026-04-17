@@ -1,5 +1,4 @@
 from itertools import takewhile
-import yaml
 import os
 from typing import Any
 from requests import Response
@@ -21,19 +20,6 @@ def create_context(test_spec: dict):
     return {k: v for k, v in takewhile(lambda x: x[0] != "steps", test_spec.items())}
 
 
-def load_yaml_test(path_file: str):
-    """Loads and parses a YAML test file.
-
-    Args:
-        yaml_path: Path to the .test.yaml or .test.yml file.
-
-    Returns:
-        The parsed YAML as a dictionary, or None if the file is empty.
-    """
-    with open(path_file, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
-
-
 def search_files(base_path: str) -> list[str]:
     """Recursively searches for test files with a .test.yaml/.test.yml suffix.
 
@@ -46,6 +32,10 @@ def search_files(base_path: str) -> list[str]:
     files = []
 
     def _search(current_path: str):
+        try:
+            os.listdir(current_path)
+        except FileNotFoundError:
+            return
         for item in os.listdir(current_path):
             full_path = os.path.join(current_path, item)
             if os.path.isfile(full_path) and (
