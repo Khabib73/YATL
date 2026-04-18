@@ -6,7 +6,7 @@
 
 **YATL** is a declarative, YAML‑based testing language for API testing. If you know HTTP and YAML, you know YATL.
 
-## 🚀 Install & Run
+## Install & Run
 
 ```bash
 pip install yatl-testing
