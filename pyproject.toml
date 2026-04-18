@@ -1,6 +1,6 @@
 [project]
-name = "yatl"
-version = "0.1.0"
+name = "yatl-testing"
+version = "0.1.1"
 description = "Yet Another Testing Language"
 keywords = ["testing", "api", "yaml", "http", "rest", "declarative"]
 authors = [
@@ -13,8 +13,6 @@ dependencies = [
     "jinja2 (>=3.1.6,<4.0.0)",
     "pyyaml (>=6.0.3,<7.0.0)",
     "ruff (>=0.15.4,<0.16.0)",
-    "uvicorn (>=0.41.0,<0.42.0)",
-    "aiohttp (>=3.13.3,<4.0.0)",
     "pytest (>=9.0.2,<10.0.0)",
     "lxml (>=6.0.2,<7.0.0)"
 ]

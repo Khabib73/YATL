@@ -6,26 +6,13 @@
 
 **YATL** is a declarative, YAML‑based testing language for API testing. If you know HTTP and YAML, you know YATL.
 
-## Why YATL?
+## 🚀 Install & Run in 30 Seconds
 
-Writing API tests in code is cumbersome. YATL turns tests into pure data $—$ declarative, readable, and accessible to every team member.
+```bash
+pip install yatl-testing
+```
 
-### The Problem
-- **You have to write code** – even for a simple GET request
-- **High entry barrier** – need to know programming languages well
-- **Complex dependencies** – chaining requests becomes spaghetti code
-- **Hard to maintain** – tests become unreadable over time
-
-### The Solution
-YATL is a **domain‑specific language** that lets you describe API tests in clean YAML. No imperative code, no hidden magic.
-
-> If you know HTTP and YAML, you know YATL.
-
-## Quick Start
-
-
-### Your First Test
-Create `ping.test.yaml`:
+Create your first test file `ping.test.yaml`:
 
 ```yaml
 name: ping
@@ -38,6 +25,31 @@ steps:
     expect:
       status: 200
 ```
+
+Run it:
+
+```bash
+yatl ping.test.yaml
+```
+
+That’s it!
+```
+
+## Why YATL?
+
+Writing API tests in code is cumbersome. YATL turns tests into pure data — declarative, readable, and accessible to every team member.
+
+### The Problem
+- **You have to write code** – even for a simple GET request
+- **High entry barrier** – need to know programming languages well
+- **Complex dependencies** – chaining requests becomes spaghetti code
+- **Hard to maintain** – tests become unreadable over time
+
+### The Solution
+YATL is a **domain‑specific language** that lets you describe API tests in clean YAML. No imperative code, no hidden magic.
+
+> If you know HTTP and YAML, you know YATL.
+
 ## Key Features
 
 - **Declarative syntax** – describe what to test, not how
@@ -77,12 +89,42 @@ steps:
       status: 200
 ```
 
-## Installation & Usage
+## Usage
 
-### From PyPI (Coming Soon)
+### Running Tests
+
 ```bash
-pip install yatl
+# Run all `.test.yaml` files in a directory
+yatl tests/
+
+# Run a single file
+yatl myapi.test.yaml
+
+# Run with 5 parallel workers
+yatl tests/ --workers 5
 ```
+
+### Writing Tests
+
+Every YATL test is a YAML file with a `.test.yaml` extension. The structure is simple:
+
+```yaml
+name: Test Suite Name
+base_url: https://api.example.com
+
+steps:
+  - name: step_one
+    request:
+      method: GET
+      url: /endpoint
+    expect:
+      status: 200
+      body:
+        json:
+          field: "expected_value"
+```
+
+See the full documentation for all available options.
 
 ## Documentation
 
