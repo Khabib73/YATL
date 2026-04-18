@@ -8,7 +8,7 @@
 
 ## Why YATL?
 
-Writing API tests in code is cumbersome. YATL turns tests into pure data—declarative, readable, and accessible to every team member.
+Writing API tests in code is cumbersome. YATL turns tests into pure data $—$ declarative, readable, and accessible to every team member.
 
 ### The Problem
 - **You have to write code** – even for a simple GET request
