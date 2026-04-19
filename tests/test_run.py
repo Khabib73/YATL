@@ -33,14 +33,14 @@ def test_is_skipped_step(expected):
 
 def test_load_test_yaml():
     "Test that load_test_yaml returns a dictionary with test data."
-    data = load_test_yaml("tests/data/ping.test.yaml")
+    data = load_test_yaml("tests/data/ping.yatl.yaml")
     assert data is not None
     assert len(data) > 0
 
 
 def test_load_test_yaml_with_invalid_file():
     "Test that load_test_yaml returns None with invalid file."
-    data = load_test_yaml("tests/data/not_found.test.yaml.invalid")
+    data = load_test_yaml("tests/data/not_found.yatl.yaml.invalid")
     assert data is None
 
 

@@ -340,7 +340,7 @@ The simplest way to run tests is via the built-in runner:
 python -m src.yatl.run
 ```
 
-This will recursively search for files ending with `.test.yaml` or `.test.yml` in the current directory and run them.
+This will recursively search for files ending with `.yatl.yaml` or `.yatl.yml` in the current directory and run them.
 
 ### Programmatic Usage
 
@@ -352,7 +352,7 @@ from yatl.extractor import DataExtractor
 from yatl.render import TemplateRenderer
 
 runner = Runner(DataExtractor(), TemplateRenderer())
-runner.run_test("path/to/test.yaml")
+runner.run_test("path/to/yatl.yaml")
 ```
 
 ## Examples

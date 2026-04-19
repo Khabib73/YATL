@@ -12,7 +12,7 @@
 pip install yatl-testing
 ```
 
-Create your first test file `ping.test.yaml`:
+Create your first test file `ping.yatl.yaml`:
 
 ```yaml
 name: ping
@@ -29,7 +29,7 @@ steps:
 Run it:
 
 ```bash
-yatl ping.test.yaml
+yatl ping.yatl.yaml
 ```
 
 That’s it!
@@ -97,7 +97,7 @@ steps:
 yatl tests/
 
 # Run a single file
-yatl myapi.test.yaml
+yatl myapi.yatl.yaml
 
 # Run with 5 parallel workers
 yatl tests/ --workers 5
@@ -105,7 +105,7 @@ yatl tests/ --workers 5
 
 ### Writing Tests
 
-Every YATL test is a YAML file with a `.test.yaml` extension. The structure is simple:
+Every YATL test is a YAML file with a `.yatl.yaml` extension. The structure is simple:
 
 ```yaml
 name: Test Suite Name
@@ -139,7 +139,3 @@ YATL fits seamlessly into CI pipelines. Example GitHub Actions workflow:
 - name: Run YATL tests
   run: yatl tests/ --workers 5
 ```
-
-## Contributing
-
-We welcome contributions! Check out our [Contributing Guidelines](CONTRIBUTING.md) to get started.

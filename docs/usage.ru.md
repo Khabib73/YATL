@@ -340,7 +340,7 @@ steps:
 python -m src.yatl.run
 ```
 
-Эта команда рекурсивно ищет файлы с расширением `.test.yaml` или `.test.yml` в текущем каталоге и запускает их.
+Эта команда рекурсивно ищет файлы с расширением `.yatl.yaml` или `.yatl.yml` в текущем каталоге и запускает их.
 
 ### Программное использование
 
@@ -352,7 +352,7 @@ from yatl.extractor import DataExtractor
 from yatl.render import TemplateRenderer
 
 runner = Runner(DataExtractor(), TemplateRenderer())
-runner.run_test("path/to/test.yaml")
+runner.run_test("path/to/yatl.yaml")
 ```
 
 ## Примеры

@@ -39,7 +39,7 @@ def search_files(base_path: str) -> list[str]:
         for item in os.listdir(current_path):
             full_path = os.path.join(current_path, item)
             if os.path.isfile(full_path) and (
-                item.endswith(".test.yaml") or item.endswith(".test.yml")
+                item.endswith(".yatl.yaml") or item.endswith(".yatl.yml")
             ):
                 files.append(full_path)
             elif os.path.isdir(full_path):
