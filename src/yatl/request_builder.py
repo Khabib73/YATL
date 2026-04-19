@@ -1,8 +1,8 @@
-from typing import Any, Dict, Union, Tuple
+from typing import Any
 from requests import request, Response
 
 
-def send_request(context: Dict[str, Any], resolved_step: Dict[str, Any]) -> Response:
+def send_request(context: dict[str, Any], resolved_step: dict[str, Any]) -> Response:
     """Builds and sends the HTTP request described by the step.
 
     Args:
@@ -18,13 +18,13 @@ def send_request(context: Dict[str, Any], resolved_step: Dict[str, Any]) -> Resp
 
 
 def build_request_data(
-    context: Dict[str, Any], resolved_step: Dict[str, Any]
-) -> Dict[str, Any]:
+    context: dict[str, Any], resolved_step: dict[str, Any]
+) -> dict[str, Any]:
     """Produces the keyword arguments for `requests.request`.
 
     Extracts method, URL, headers, parameters, cookies, timeout, and body
-    from the step's `request` block. Automatically sets Content‑Type headers
-    based on the body format (JSON, XML, text, form‑data, files).
+    from the step's `request` block. Automatically sets Content-Type headers
+    based on the body format (JSON, XML, text, form-data, files).
 
     Returns:
         A dictionary that can be unpacked as `requests.request(**kwargs)`.
@@ -32,14 +32,14 @@ def build_request_data(
     Raises:
         ValueError: If the body has an unsupported type.
     """
-    request_data: Dict[str, Any] = resolved_step["request"]
+    request_data: dict[str, Any] = resolved_step["request"]
     method, url, timeout, headers, params, cookies, body = extract_request_params(
         request_data
     )
 
     url = build_url(context.get("base_url", ""), url)
 
-    kwargs: Dict[str, Any] = {
+    kwargs: dict[str, Any] = {
         "method": method,
         "url": url,
         "timeout": timeout,
@@ -75,8 +75,8 @@ def build_url(base_url: str, url: str) -> str:
 
 
 def extract_request_params(
-    request_data: Dict[str, Any],
-) -> Tuple[str, str, Any, Dict, Dict, Dict, Any]:
+    request_data: dict[str, Any],
+) -> tuple[str, str, Any, dict, dict, dict, Any]:
     """Extracts request parameters from the request data dictionary.
 
     Returns:
@@ -86,7 +86,7 @@ def extract_request_params(
     url: str = request_data.get("url", "")
     timeout = request_data.get("timeout", None)
     headers = request_data.get("headers", {})
-    body: Union[Dict[str, Any], str, None] = request_data.get("body", None)
+    body: dict[str, Any] | str | None = request_data.get("body", None)
     params = request_data.get("params", {})
     cookies = request_data.get("cookies", {})
 
@@ -94,7 +94,7 @@ def extract_request_params(
 
 
 def process_body(
-    body: Union[Dict[str, Any], str], headers: Dict[str, str], kwargs: Dict[str, Any]
+    body: dict[str, Any] | str, headers: dict[str, str], kwargs: dict[str, Any]
 ) -> None:
     """Processes the request body and updates kwargs and headers accordingly.
 
@@ -132,7 +132,7 @@ def process_body(
         raise ValueError(f"Unsupported body type: {type(body)}")
 
 
-def _set_content_type(headers: Dict[str, str], content_type: str) -> None:
+def _set_content_type(headers: dict[str, str], content_type: str) -> None:
     """Sets the Content-Type header if not already present.
 
     Args:
@@ -149,7 +149,7 @@ class RequestBuilder:
     Deprecated: Use the module-level functions instead.
     """
 
-    def __init__(self, context: Dict[str, Any], resolved_step: Dict[str, Any]):
+    def __init__(self, context: dict[str, Any], resolved_step: dict[str, Any]):
         self.context = context
         self.resolved_step = resolved_step
 
@@ -157,7 +157,7 @@ class RequestBuilder:
         """Builds and sends the HTTP request described by the step."""
         return send_request(self.context, self.resolved_step)
 
-    def build_request_data(self) -> Dict[str, Any]:
+    def build_request_data(self) -> dict[str, Any]:
         """Produces the keyword arguments for `requests.request`."""
         return build_request_data(self.context, self.resolved_step)
 
