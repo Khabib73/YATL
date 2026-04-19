@@ -2,6 +2,7 @@ from itertools import takewhile
 import os
 from typing import Any
 from requests import Response
+import yaml
 
 
 def create_context(test_spec: dict):
@@ -85,3 +86,44 @@ def get_nested_value(data: Any, path: str) -> Any:
         else:
             raise ValueError(f"Path component '{key}' not found in {current}")
     return current
+
+
+class LoadError(Exception):
+    "Base class for load errors."
+
+    pass
+
+
+class InvalidYamlError(LoadError):
+    "Invalid YAML error."
+
+    pass
+
+
+class TestStructureError(LoadError):
+    "Test structure error."
+
+    pass
+
+
+def load_test_yaml(file_path: str) -> dict[Any, Any] | bool:
+    """Loads and parses a YAML test file.
+
+    Args:
+        file_path: Path to the .test.yaml or .test.yml file.
+
+    Returns:
+        The parsed YAML as a dictionary, or False if the file is not found."
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            test_specification = yaml.safe_load(f)
+            if not test_specification:
+                test_specification = {}
+            return test_specification
+    except FileExistsError:
+        raise FileExistsError(f"Not a file: {file_path}")
+    except yaml.YAMLError as e:
+        raise InvalidYamlError(f"Invalid YAML in {file_path}: {e}")
+    except UnicodeDecodeError as e:
+        raise InvalidYamlError(f"Encoding error in {file_path}: {e}")

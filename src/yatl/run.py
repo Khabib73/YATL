@@ -1,10 +1,9 @@
 import concurrent.futures
-import yaml
 from typing import Any
 from .step_executor import StepExecutor
 from .extractor import DataExtractor
 from .render import TemplateRenderer
-from .utils import create_context, search_files
+from .utils import create_context, search_files, load_test_yaml
 from .colors import (
     success,
     skipped,
@@ -12,25 +11,7 @@ from .colors import (
     info,
     header,
 )
-
-
-def load_test_yaml(yaml_path: str) -> dict[Any, Any] | bool:
-    """Loads and parses a YAML test file.
-
-    Args:
-        yaml_path: Path to the .test.yaml or .test.yml file.
-
-    Returns:
-        The parsed YAML as a dictionary, or False if the file is not found."
-    """
-    try:
-        with open(yaml_path, "r", encoding="utf-8") as f:
-            test_specification = yaml.safe_load(f)
-            if test_specification is None:
-                return False
-            return test_specification
-    except FileNotFoundError:
-        return False
+from .reporter import Reporter
 
 
 def is_skipped(item: dict[Any, Any]) -> bool:
@@ -43,21 +24,6 @@ def is_skipped(item: dict[Any, Any]) -> bool:
         True if the item is skipped, False otherwise.
     """
     return item.get("skip", False)
-
-
-class Reporter:
-    """Simple reporter that collects and prints messages."""
-
-    def __init__(self):
-        self.info = []
-
-    def add_info(self, info: str) -> None:
-        self.info.append(info)
-
-    def print_info(self) -> None:
-        for line in self.info:
-            print(line)
-        self.info.clear()
 
 
 def run_tests_concurrently(runner, test_path: str = ".", max_workers: int = 10) -> None:

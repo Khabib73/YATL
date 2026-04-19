@@ -1,5 +1,5 @@
-from src.yatl.utils import create_context
-from src.yatl.run import is_skipped, load_test_yaml, search_files
+from src.yatl.utils import create_context, load_test_yaml, search_files
+from src.yatl.run import is_skipped
 import pytest
 
 
@@ -33,8 +33,8 @@ def test_load_test_yaml():
 
 def test_load_test_yaml_with_invalid_file():
     "Test that load_test_yaml returns None with invalid file."
-    data = load_test_yaml("tests/data/not_found.yatl.yaml.invalid")
-    assert data is False
+    with pytest.raises(FileNotFoundError):
+        load_test_yaml("tests/data/not_found.yatl.yaml.invalid")
 
 
 def test_search_files():
