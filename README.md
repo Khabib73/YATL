@@ -93,7 +93,7 @@ steps:
 ### Running Tests
 
 ```bash
-# Run all `.test.yaml` files in a directory
+# Run all `.yatl.yaml` files in a directory
 yatl tests/
 
 # Run a single file
