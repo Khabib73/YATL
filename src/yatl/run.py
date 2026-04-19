@@ -14,45 +14,35 @@ from .colors import (
 )
 
 
-def load_test_yaml(yaml_path: str) -> dict[Any, Any] | None:
+def load_test_yaml(yaml_path: str) -> dict[Any, Any] | bool:
     """Loads and parses a YAML test file.
 
     Args:
         yaml_path: Path to the .test.yaml or .test.yml file.
 
     Returns:
-        The parsed YAML as a dictionary, or None if the file is not found."
+        The parsed YAML as a dictionary, or False if the file is not found."
     """
     try:
         with open(yaml_path, "r", encoding="utf-8") as f:
             test_specification = yaml.safe_load(f)
+            if test_specification is None:
+                return False
             return test_specification
     except FileNotFoundError:
-        return None
+        return False
 
 
-def is_skipped_test(test_specification: dict[Any, Any]) -> bool:
-    """Checks if a test is skipped based on the "skip" flag.
-
-    Args:
-        test_specification: The parsed YAML dictionary.
-
-    Returns:
-        True if the test is skipped, False otherwise.
-    """
-    return test_specification.get("skip", False)
-
-
-def is_skipped_step(step: dict[Any, Any]) -> bool:
-    """Checks if a step is skipped based on the "skip" flag.
+def is_skipped(item: dict[Any, Any]) -> bool:
+    """Checks if an item is skipped based on the "skip" flag.
 
     Args:
-        step: The parsed YAML dictionary.
+        item: The parsed YAML dictionary.
 
     Returns:
-        True if the step is skipped, False otherwise.
+        True if the item is skipped, False otherwise.
     """
-    return step.get("skip", False)
+    return item.get("skip", False)
 
 
 class Reporter:
@@ -129,7 +119,7 @@ class Runner:
         if step is None:
             return context
 
-        if is_skipped_step(step):
+        if is_skipped(step):
             reporter.add_info(
                 skipped(f"Step {step_number}: {step.get('name', '')} skipped")
             )
@@ -138,9 +128,9 @@ class Runner:
             reporter.add_info(info(f"Step {step_number}: {step.get('name', '')}"))
 
             if step.get("description"):
-                reporter.add_info(info(f"description: {step.get('description', '')}"))
+                reporter.add_info(info(f"description: {step['description']}"))
             elif step.get("desc"):
-                reporter.add_info(info(f"description: {step.get('desc', '')}"))
+                reporter.add_info(info(f"description: {step['desc']}"))
 
             return self.step_executor.run_step(step, context)
 
@@ -161,7 +151,7 @@ class Runner:
         context = create_context(test_specification)
         reporter = Reporter()
 
-        if is_skipped_test(test_specification):
+        if is_skipped(test_specification):
             reporter.add_info(
                 skipped(f"Test {test_specification.get('name', '')} skipped")
             )

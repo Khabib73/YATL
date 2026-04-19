@@ -1,5 +1,5 @@
 from src.yatl.utils import create_context
-from src.yatl.run import is_skipped_test, is_skipped_step, load_test_yaml, search_files
+from src.yatl.run import is_skipped, load_test_yaml, search_files
 import pytest
 
 
@@ -18,17 +18,10 @@ def test_create_context_with_empty_data_returns_empty_context():
 
 
 @pytest.mark.parametrize("expected", [True, False])
-def test_is_skipped_test(expected):
-    "Test that is_skipped_test returns True if test is skipped."
-    data = {"skip": expected}
-    assert is_skipped_test(data) is expected
-
-
-@pytest.mark.parametrize("expected", [True, False])
-def test_is_skipped_step(expected):
-    "Test that is_skipped_step returns True if step is skipped."
-    step = {"skip": expected}
-    assert is_skipped_step(step) is expected
+def test_is_skipped(expected):
+    """Проверяет, что is_skipped возвращает значение ключа 'skip' (по умолчанию False)."""
+    item = {"skip": expected}
+    assert is_skipped(item) is expected
 
 
 def test_load_test_yaml():
@@ -41,7 +34,7 @@ def test_load_test_yaml():
 def test_load_test_yaml_with_invalid_file():
     "Test that load_test_yaml returns None with invalid file."
     data = load_test_yaml("tests/data/not_found.yatl.yaml.invalid")
-    assert data is None
+    assert data is False
 
 
 def test_search_files():

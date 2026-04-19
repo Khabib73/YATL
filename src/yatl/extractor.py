@@ -59,7 +59,6 @@ class XmlExtractor(Extractor):
             else:
                 elements = root.xpath(xpath)
             if elements:
-                # Take first element's text
                 extracted[key] = elements[0].text
             else:
                 raise ValueError(f"XML element '{key}' not found with xpath '{xpath}'")
