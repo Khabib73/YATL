@@ -1,6 +1,6 @@
 [project]
 name = "yatl-testing"
-version = "0.1.1"
+version = "0.1.2"
 description = "Yet Another Testing Language"
 keywords = ["testing", "api", "yaml", "http", "rest", "declarative"]
 authors = [
