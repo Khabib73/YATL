@@ -2,15 +2,9 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 
-class UserInfo(BaseModel):
-    email: str
-    phone: str
-
-
 class User(BaseModel):
     name: str
     age: int
-    info: UserInfo
 
 
 app = FastAPI()
@@ -19,7 +13,6 @@ users = {
     1: {
         "name": "John Doe",
         "age": 30,
-        "info": {"email": "john.doe@example.com", "phone": "1234567890"},
     }
 }
 
@@ -36,11 +29,6 @@ def create_user(user: User):
     user_id = len(users) + 1
     users[user_id] = user.dict()
     return users[user_id]
-
-
-@app.get("/users")
-def user_count():
-    return {"count": len(users)}
 
 
 if __name__ == "__main__":
