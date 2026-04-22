@@ -36,7 +36,7 @@ def run_tests_concurrently(runner, test_path: str = ".", max_workers: int = 10) 
     """
     files = search_files(test_path)
     if not files:
-        print(skipped(f"No .test.yaml files found in {test_path}"))
+        print(skipped(f"No .yatl.yaml files found in {test_path}"))
         return
 
     print(info(f"Found {len(files)} test file(s)"))
