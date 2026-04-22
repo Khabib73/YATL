@@ -14,7 +14,7 @@ def main():
         "path",
         nargs="?",
         default=".",
-        help="Path to directory containing .test.yaml files (default: current directory)",
+        help="Path to directory containing .yatl.yaml files (default: current directory)",
     )
     parser.add_argument(
         "--workers",
