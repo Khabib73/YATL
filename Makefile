@@ -12,3 +12,6 @@ yaml:
 
 test:
 	poetry run pytest
+
+clear_env:
+	poetry env remove --all 

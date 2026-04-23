@@ -1,41 +1,43 @@
-[project]
+[tool.poetry]
 name = "yatl-testing"
 version = "0.1.2"
 description = "Yet Another Testing Language"
 keywords = ["testing", "api", "yaml", "http", "rest", "declarative"]
-authors = [
-    {name = "Khabib Shakhbanov"}
-]
+authors = ["Khabib Shakhbanov"]
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = [
-    "requests>=2.32.5",
-    "jinja2>=3.1.6",
-    "pyyaml>=6.0.3",
-    "lxml>=6.0.2",
-]
+packages = [{ include = "yatl", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.14"
+requests = ">=2.32.5"
+jinja2 = ">=3.1.6"
+pyyaml = ">=6.0.3"
+lxml = ">=6.0.2"
+
+[tool.poetry.group.dev]
+optional = true
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.15.4"
 pytest = "^9.0.2"
 mypy = "^1.19.1"
 
+[tool.poetry.group.examples]
+optional = true
+
 [tool.poetry.group.examples.dependencies]
 fastapi = "^0.136.0"
 uvicorn = "^0.44.0"
 
-[tool.poetry]
-packages = [{include = "yatl", from = "src"}]
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[project.scripts]
+[tool.poetry.scripts]
 yatl = "yatl.__main__:main"
 
-[project.urls]
+[tool.poetry.urls]
 Homepage = "https://github.com/Khabib73/YATL"
 Documentation = "https://github.com/Khabib73/YATL#readme"
 Repository = "https://github.com/Khabib73/YATL"
 Issues = "https://github.com/Khabib73/YATL/issues"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
