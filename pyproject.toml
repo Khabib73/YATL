@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yatl-testing"
-version = "0.1.2"
+version = "0.1.3"
 description = "Yet Another Testing Language"
 keywords = ["testing", "api", "yaml", "http", "rest", "declarative"]
 authors = ["Khabib Shakhbanov"]
