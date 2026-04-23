@@ -60,4 +60,4 @@ jobs:
         run: pip install yatl-testing
 
       - name: run tests
-        run: yatl /test_yaml
+        run: yatl /tests_yaml
