@@ -1,16 +1,16 @@
-check:
+lint:
 	poetry run ruff check .
 
 format:
 	poetry run ruff format .
 
-types:
+typing:
 	poetry run mypy .
 
-yaml:
+integration_tests:
 	poetry run python -m src.yatl.run
 
-test:
+unit_test:
 	poetry run pytest
 
 clear_env:
