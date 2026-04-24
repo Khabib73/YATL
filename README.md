@@ -34,6 +34,62 @@ yatl .
 
 That’s it!
 
+---
+
+Consider another example, let's try to test a simple POST request to `https://api/users`:
+
+```python
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class User(BaseModel):
+    name: str
+    age: int
+
+db = [
+    User(name="John", age=30),
+    User(name="Jane", age=25),
+]
+
+@app.post("/users", status_code=201)
+def create_user(user: User):
+    db.append(user)
+    return {"status": "ok"}
+```
+
+Create a test file `users.yatl.yaml`:
+
+```yaml
+name: User API
+base_url: https://localhost:8000
+
+steps:
+  - name: create_user
+    description: Create a new user with name=John and age=30
+    request:
+      method: POST
+      url: /users
+      body:
+        json:
+          name: John
+          age: 30
+    expect:
+      status: 201
+      body:
+        json:
+          status: ok
+```
+
+Run it:
+
+```bash
+yatl .
+```
+
+That’s it!
+
 ## Why YATL?
 
 Writing API tests in code is cumbersome. YATL turns tests into pure data — declarative, readable, and accessible to every team member.
