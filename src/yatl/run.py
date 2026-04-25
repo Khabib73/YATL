@@ -1,5 +1,5 @@
 import concurrent.futures
-from typing import Any
+from typing import Any, Callable
 from .step_executor import StepExecutor
 from .extractor import DataExtractor
 from .render import TemplateRenderer
@@ -13,6 +13,7 @@ from .colors import (
 )
 from .reporter import Reporter
 from .utils import is_skipped
+from .interface import IReporter
 
 
 def run_tests_concurrently(runner, test_path: str = ".", max_workers: int = 10) -> None:
@@ -46,20 +47,25 @@ class Runner:
     and maintains a context that is passed between steps.
     """
 
-    def __init__(self, step_executor: StepExecutor):
+    def __init__(
+        self,
+        step_executor: StepExecutor,
+        reporter_factory: Callable[[], IReporter] = Reporter,
+    ):
         """Initializes the runner with required services.
 
         Args:
             step_executor: Executes individual test steps.
         """
         self.step_executor = step_executor
+        self.reporter_factory = reporter_factory
 
     def _execute_step(
         self,
         step_number: int,
         step: dict,
         context: dict,
-        reporter: Reporter,
+        reporter: IReporter,
     ) -> dict[Any, Any]:
         """Execute a single step.
 
@@ -104,7 +110,7 @@ class Runner:
             return
 
         context = create_context(test_specification)
-        reporter = Reporter()
+        reporter = self.reporter_factory()
 
         if is_skipped(test_specification):
             reporter.add_info(
@@ -126,5 +132,5 @@ class Runner:
 
 
 if __name__ == "__main__":
-    runner = Runner(StepExecutor(DataExtractor(), TemplateRenderer()))
+    runner = Runner(StepExecutor(DataExtractor(), TemplateRenderer()), Reporter)
     run_tests_concurrently(runner, max_workers=10)
