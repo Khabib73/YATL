@@ -1,5 +1,5 @@
 from requests import Response
-from typing import Any
+from typing import Any, Callable
 import json
 from lxml import etree
 from .utils import get_nested_value, get_content_type
@@ -155,7 +155,7 @@ class ResponseValidator:
         self.response = response
         self.expect_spec = expect_spec
 
-    def _validate_status(self):
+    def _validate_status(self) -> None:
         """Validates that the response status code matches the expected one.
 
         Raises:
@@ -185,7 +185,7 @@ class ResponseValidator:
             return value.split(";")[0].strip().lower()
         return value
 
-    def _validate_headers(self):
+    def _validate_headers(self) -> None:
         """Validates that all expected headers are present and match.
 
         Raises:
@@ -205,7 +205,7 @@ class ResponseValidator:
                         f"Header '{key}' expected '{norm_expected}', got '{norm_actual}' (original: '{actual}')"
                     )
 
-    def _get_body_validator(self, content_type: str):
+    def _get_body_validator(self, content_type: str) -> Callable | None:
         """Return appropriate body validator based on content-type.
 
         Args:
@@ -220,7 +220,7 @@ class ResponseValidator:
         except ValueError:
             return None
 
-    def check_expectations(self):
+    def check_expectations(self) -> None:
         """Runs all validations defined in the expectation spec.
 
         Validates status, headers, and body (based on content-type). The body

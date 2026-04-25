@@ -1,7 +1,8 @@
 from itertools import takewhile
+from typing import Any
 
 
-def create_context(test_spec: dict):
+def create_context(test_spec: dict) -> dict[str, Any]:
     """Creates the initial context from the test specification.
 
     The context consists of all top-level keys that appear before the
