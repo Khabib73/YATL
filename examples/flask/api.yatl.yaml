@@ -1,0 +1,36 @@
+name: testAPI
+base_url: http://localhost:8000
+
+steps:
+  - name: testGetUser
+    request:
+      method: GET
+      url: /users/1
+    expect:
+      status: 200
+      body:
+        json:
+          name: John Doe
+          age: 30
+  
+  - name: testGetUserNotFound
+    request:
+      method: GET
+      url: /users/2
+    expect:
+      status: 404
+  
+  - name: testCreateUser
+    request:
+      method: POST
+      url: /users
+      body:
+        json:
+          name: Mike Doe
+          age: 20
+    expect:
+      status: 201
+      body:
+        json:
+          name: Mike Doe
+          age: 20
