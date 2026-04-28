@@ -1,8 +1,9 @@
 from .extractor import DataExtractor
 from .validator import ResponseValidator
 from .request_builder import send_request
-from typing import Any
-from .interface import ITemplateRenderer
+from typing import Any, Callable
+from .interface import ITemplateRenderer, IResponseValidator
+from requests import Response
 
 
 def execute_step(
@@ -10,6 +11,7 @@ def execute_step(
     context: dict[str, Any],
     data_extractor: DataExtractor,
     template_renderer: ITemplateRenderer,
+    response_validator: Callable[[Response, dict[str, Any]], IResponseValidator],
 ) -> dict[str, Any]:
     """Executes a single test step and returns the updated context.
 
@@ -31,7 +33,7 @@ def execute_step(
     response = send_request(context, resolved_step)
 
     if "expect" in resolved_step:
-        validator = ResponseValidator(response, resolved_step["expect"])
+        validator = response_validator(response, resolved_step["expect"])
         validator.check_expectations()
 
     if "extract" in resolved_step:
@@ -75,4 +77,5 @@ class StepExecutor:
             context,
             self.data_extractor,
             self.template_renderer,
+            ResponseValidator,
         )

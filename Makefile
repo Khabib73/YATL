@@ -7,10 +7,11 @@ format:
 typing:
 	poetry run mypy .
 
+.PHONY: integration_tests
 integration_tests:
 	poetry run python -m src.yatl.run
 
-unit_test:
+unit_tests:
 	poetry run pytest
 
 clear_env:
