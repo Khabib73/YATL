@@ -11,7 +11,7 @@ typing:
 integration_tests:
 	poetry run python -m src.yatl.run
 
-unit_test:
+unit_tests:
 	poetry run pytest
 
 clear_env:
