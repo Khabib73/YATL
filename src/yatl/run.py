@@ -1,8 +1,9 @@
 import concurrent.futures
 from typing import Any, Callable
-from .step_executor import StepExecutor
+from .step_executor import execute_step
 from .extractor import DataExtractor
 from .render import TemplateRenderer
+from .validator import ResponseValidator
 from .utils import create_context, search_files, load_test_yaml
 from .colors import (
     success,
@@ -13,7 +14,8 @@ from .colors import (
 )
 from .reporter import Reporter
 from .utils import is_skipped
-from .interface import IReporter
+from .interface import IReporter, ITemplateRenderer
+from requests import Response
 
 
 def run_tests_concurrently(runner, test_path: str = ".", max_workers: int = 10) -> None:
@@ -49,18 +51,27 @@ class Runner:
 
     def __init__(
         self,
-        step_executor: StepExecutor,
+        data_extractor: DataExtractor,
+        template_renderer: ITemplateRenderer,
+        response_validator_factory: Callable[
+            [Response, dict[str, Any]], Any
+        ] = ResponseValidator,
         reporter_factory: Callable[[], IReporter] = Reporter,
     ):
         """Initializes the runner with required services.
 
         Args:
-            step_executor: Executes individual test steps.
+            data_extractor: Used to extract values from responses.
+            template_renderer: Used to render templates in the step.
+            response_validator_factory: Factory function that creates a validator instance
+                from a response and expectation dictionary.
         """
-        self.step_executor = step_executor
+        self.data_extractor = data_extractor
+        self.template_renderer = template_renderer
+        self.response_validator_factory = response_validator_factory
         self.reporter_factory = reporter_factory
 
-    def _execute_step(
+    def _process_step(
         self,
         step_number: int,
         step: dict,
@@ -93,7 +104,13 @@ class Runner:
             elif step.get("desc"):
                 reporter.add_info(info(f"description: {step['desc']}"))
 
-            return self.step_executor.run_step(step, context)
+            return execute_step(
+                step,
+                context,
+                self.data_extractor,
+                self.template_renderer,
+                self.response_validator_factory,
+            )
 
     def run_test(self, yaml_path: str) -> None:
         """Executes a single test file.
@@ -125,12 +142,12 @@ class Runner:
         steps: list[dict] = test_specification.get("steps", [])
 
         for i, step in enumerate(steps, start=1):
-            context = self._execute_step(i, step, context, reporter)
+            context = self._process_step(i, step, context, reporter)
 
         reporter.add_info(success("Test passed"))
         reporter.print_info()
 
 
 if __name__ == "__main__":
-    runner = Runner(StepExecutor(DataExtractor(), TemplateRenderer()), Reporter)
+    runner = Runner(DataExtractor(), TemplateRenderer(), ResponseValidator, Reporter)
     run_tests_concurrently(runner, max_workers=10)

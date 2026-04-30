@@ -1,7 +1,7 @@
 import pytest
 from src.yatl.extractor import DataExtractor
 from src.yatl.render import TemplateRenderer
-from src.yatl.step_executor import StepExecutor
+from src.yatl.validator import ResponseValidator
 from src.yatl.run import Runner
 
 
@@ -16,13 +16,8 @@ def template_render():
 
 
 @pytest.fixture
-def step_executor(data_extractor, template_render):
-    return StepExecutor(data_extractor, template_render)
-
-
-@pytest.fixture
-def runner(step_executor):
-    return Runner(step_executor)
+def runner(data_extractor, template_render):
+    return Runner(data_extractor, template_render, ResponseValidator)
 
 
 @pytest.fixture

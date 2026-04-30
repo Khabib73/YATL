@@ -3,9 +3,9 @@
 import argparse
 
 from .run import Runner, run_tests_concurrently
-from .step_executor import StepExecutor
 from .extractor import DataExtractor
 from .render import TemplateRenderer
+from .validator import ResponseValidator
 
 
 def main():
@@ -26,7 +26,7 @@ def main():
 
     args = parser.parse_args()
 
-    runner = Runner(StepExecutor(DataExtractor(), TemplateRenderer()))
+    runner = Runner(DataExtractor(), TemplateRenderer(), ResponseValidator)
 
     run_tests_concurrently(runner, test_path=args.path, max_workers=args.workers)
 

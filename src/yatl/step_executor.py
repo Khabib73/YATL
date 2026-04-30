@@ -1,5 +1,4 @@
 from .extractor import DataExtractor
-from .validator import ResponseValidator
 from .request_builder import send_request
 from typing import Any, Callable
 from .interface import ITemplateRenderer, IResponseValidator
@@ -25,6 +24,8 @@ def execute_step(
         context: The current context (global variables).
         data_extractor: Used to extract values from responses.
         template_renderer: Used to render templates in the step.
+        response_validator: Factory function that creates a validator instance
+            from a response and expectation dictionary.
 
     Returns:
         The updated context (with newly extracted values, if any).
@@ -41,41 +42,3 @@ def execute_step(
         context.update(extracted)
 
     return context
-
-
-class StepExecutor:
-    """Executes a single test step.
-
-    Responsibilities:
-      - Render templates in the step using the current context.
-      - Build and send the HTTP request.
-      - Validate the response against expectations (if any).
-      - Extract data from the response and update the context.
-    """
-
-    def __init__(
-        self,
-        data_extractor: DataExtractor,
-        template_renderer: ITemplateRenderer,
-    ):
-        """Initializes the step executor with required services.
-
-        Args:
-            data_extractor: Used to extract values from responses.
-            template_renderer: Used to render templates in the step.
-        """
-        self.data_extractor = data_extractor
-        self.template_renderer = template_renderer
-
-    def run_step(self, step: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
-        """Executes a single test step and returns the updated context.
-
-        Delegates to the execute_step function.
-        """
-        return execute_step(
-            step,
-            context,
-            self.data_extractor,
-            self.template_renderer,
-            ResponseValidator,
-        )
