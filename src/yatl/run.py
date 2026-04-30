@@ -24,7 +24,7 @@ def run_tests_concurrently(runner, test_path: str = ".", max_workers: int = 10) 
     Args:
         runner: Runner instance with a run_test method.
         test_path: Path to directory containing test files.
-        max_workers: Maximum number of worker threads.
+        max_workers: Maximum number of worker threads, default 10.
     """
     files = search_files(test_path)
     if not files:
@@ -65,6 +65,7 @@ class Runner:
             template_renderer: Used to render templates in the step.
             response_validator_factory: Factory function that creates a validator instance
                 from a response and expectation dictionary.
+            reporter_factory: Factory function that creates a reporter instance.
         """
         self.data_extractor = data_extractor
         self.template_renderer = template_renderer
@@ -81,6 +82,7 @@ class Runner:
         """Execute a single step.
 
         Args:
+            step_number: Step number in the test.
             step: Parsed YAML dictionary.
             context: Current context dictionary.
             reporter: Reporter instance for logging.
